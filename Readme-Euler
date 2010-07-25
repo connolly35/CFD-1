@@ -1,0 +1,37 @@
+Assignment 3
+Euler Equation
+
+    -M.Prakash
+     AE07B014
+
+About the files:
+The euler.cpp is the solver
+The gnuplot_i.hpp is a header with simplified gnuplot functions, for better integration with the code
+The euler is a compiled binary of the euler.cpp code
+[ Note: The above code needs gnuplot to be installed in the PC, and has been tested only in the Linux platform ]
+
+Running the code:
+After every iteration, the wxt windows from gnuplot keeps getting updated with the new shape of the pressure, velocity and density plots.
+[ Note: The axes are autoscaled ]
+
+Working of the code:
+
+The euler.cpp, uses time-marching technique on the conservative form of the Euler's equations, split into the Q and E matrices.
+
+It solves the equation : d[Q]/d[t] + d[E]/d[x] = 0 with the FTCS scheme for time marching.
+
+Since FTCS is unconditionally unstable, dissipation terms ( second order and fourth order ) are added with coefficients of +0.1 and -0.01.
+
+For the Boundary conditions of the nozzle:
+    1. Entrance:
+        Since, we have two boundary conditions specified here, namely, Stagnation Pressure and Temperature, we need to add one more left-running characteristic. Therfore, after every timestep the velocity of the initial point is taken as an extrapolation of the velocity of the next point, and the rest of the parameters are updated to match the stagnation conditions.
+
+    2. Exit:
+        Here, we have only one boundary condition specified, therfore, two right-running characteristics have to be specified. For this purpose, the velocity and temperature of the N-1th point is extrapolated to N-2th point, and the rest of the parameters are updated accordingly [P is fixed at Patm here].
+
+The output from the code are the pressure, velocity and density plots.
+
+To exit, just press 2 at the end of an iteration and close the open gnuplot widow by pressing q.
+
+
+Note: The so called CFL here is just delT/delX. And the code works only for very small CFL, dictated by the number of grid points. [ Roughly O(1e-5) ]
